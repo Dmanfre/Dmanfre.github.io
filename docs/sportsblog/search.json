@@ -14,13 +14,6 @@
     "text": "This is my sports data journalism blog. I want to show the world that I can do data journalism at a high level. It’s really important to me and makes me feel quite smart because I never thought I could do this before."
   },
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
-  },
-  {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "Welcome To My Blog",
@@ -28,10 +21,24 @@
     "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
   },
   {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/Big-Ten-Plays/index.html",
+    "href": "posts/Big-Ten-Plays/index.html",
+    "title": "Big Ten Plays",
+    "section": "",
+    "text": "Code\n#libraries\nlibrary(tidyverse)\n\n\n── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──\n✔ ggplot2 3.4.0      ✔ purrr   0.3.5 \n✔ tibble  3.1.8      ✔ dplyr   1.0.10\n✔ tidyr   1.2.1      ✔ stringr 1.4.1 \n✔ readr   2.1.3      ✔ forcats 0.5.2 \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n\n\n\n\nCode\n#loading data\n\n footballlogs_22 &lt;- read_csv(\"https://dwillis.github.io/sports-data-files/footballlogs22.csv\")\n\n\nRows: 1672 Columns: 54\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr   (8): HomeAway, Opponent, Result, TeamFull, TeamURL, Outcome, Team, Con...\ndbl  (45): Game, PassingCmp, PassingAtt, PassingPct, PassingYds, PassingTD, ...\ndate  (1): Date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nCode\nfootballlogs_23 &lt;- read_csv(\"https://dwillis.github.io/sports-data-files/footballlogs23.csv\")\n\n\nRows: 752 Columns: 54\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr   (8): HomeAway, Opponent, Result, TeamFull, TeamURL, Outcome, Team, Con...\ndbl  (45): Game, PassingCmp, PassingAtt, PassingPct, PassingYds, PassingTD, ...\ndate  (1): Date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\n\nCode\n#filtering TeamFull for the big_ten opponents.\n big_ten_logs_22 &lt;- footballlogs_22 %&gt;% \n  filter(Conference == \"Big Ten Conference\")\n\n\n\n\nCode\n big_ten_logs_23 &lt;- footballlogs_23 %&gt;% \n  filter(Conference == \"Big Ten Conference\")\n\n\n\n\nCode\n# generateing average offensive plays for 2022\n\navg_offense_b10 &lt;- big_ten_logs_22 %&gt;% \ngroup_by(TeamFull) %&gt;% \nsummarize(avg_offplays_22 = mean(OffensivePlays)) %&gt;% \narrange(desc(avg_offplays_22))\n\n\n\n\nCode\n#2023 avg offensive plays \n\navg_offense_b10_23 &lt;- big_ten_logs_23 %&gt;% \ngroup_by(TeamFull) %&gt;% \nsummarize(avg_offplays_23 = mean(OffensivePlays)) %&gt;% \narrange(desc(avg_offplays_23))\n\n\n\n\nCode\n#joined dataframes\n\navg_offensive_plays_joined &lt;- inner_join(avg_offense_b10, avg_offense_b10_23, by = \"TeamFull\")\n\navg_offensive_plays_joined &lt;- avg_offensive_plays_joined %&gt;% \nmutate(difference = avg_offplays_23 - avg_offplays_22)\n\n\nPurdue and Penn State are interesting in this list. Why? Because Penn State is producing 10 more offensive plays on average in 2023 than a season ago. It finished in the middle of the conference then with around 70 offensive plays per game and now sits No. 1 in the conference.\nAs for Purdue, it may have gotten off the most offensive plays on average but the Boilermakers ranked in the bottom half of the conference in offensive efficiency last sesaon with a rating of 128.4. Rutgers had the lowest at 99.8\n\n\nCode\n#plotting this on a graph\n#I used ChatGPT to tell me where desc goes.\n\n#2022 graph\nggplot() + \n  geom_bar(\n    data=avg_offense_b10, \n    aes(x=reorder(TeamFull, -desc(avg_offplays_22)),\n        weight=avg_offplays_22)) +\n  labs(\n    title=\"More plays doesn't always mean more efficient\",\n    subtitle = \"Purdue averaged the most offensive plays but had low offensive efficiency\",\n    caption = \"Source: Sports Data Journalism Class\",\n    x=\"Team\", \n    y=\"Average number of offensive plays\") + \n  theme_minimal() + \n  coord_flip()\n\n\n\n\n\nThis sesaon, Penn State and Purdue are a bit closer in offensive efficiency and with Purdue ranking second in the average amount of offensive plays, it shows the Boilermakers know how to manage the ball.\nTheir two quarterbacks Drew Allen and Hudson Card, rank No. 4 and 5, respectively in the Big Ten in passing efficiency. Allen does have a slight edge over Card in passing percentage through five games in 2023.\n\n\nCode\n#2023 graph\nggplot() + \n  geom_bar(\n    data=avg_offense_b10_23, \n    aes(x=reorder(TeamFull, -desc(avg_offplays_23)),\n        weight=avg_offplays_23)) +\n  labs(\n    title=\"Penn State sees offensive surge in 2023\",\n    subtitle = \"Last seaosn, the Nittany Lions were sixth in the Big Ten\",\n    caption = \"Source: Sports Data Journalism Class\",\n    x=\"Team\", \n    y=\"Average number of offensive plays\") + \n  theme_minimal() + \n  coord_flip()"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "sports_data_blog",
     "section": "",
-    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nOct 5, 2023\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nDylan’s world of sports data\n\n\n\n\n\n\n\n\n\n\n\n\nOct 5, 2023\n\n\nDylan Manfre\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 2, 2023\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Big Ten Plays\n\n\n\n\n\n\n\n\n\n\n\n\nOct 10, 2023\n\n\nDylan Manfre\n\n\n\n\n\n\n  \n\n\n\n\nPost With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nOct 5, 2023\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nDylan’s world of sports data\n\n\n\n\n\n\n\n\n\n\n\n\nOct 5, 2023\n\n\nDylan Manfre\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 2, 2023\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
   }
 ]
