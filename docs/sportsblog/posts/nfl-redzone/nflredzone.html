@@ -265,8 +265,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>I created a difference column to show how much a team has improved or regressed from weeks 3 to 8 of the season and arranged it by the teams that have the largest differential. The Jets being as high as they are surprised me. It shows they improved a lot in the red zone even though they weren’t a good team overall.</p>
-<p>Kansas City being No.&nbsp;2 makes sense to me because Mahomes is always finding ways to improve and find new ways to maneuver his offense through the red zone and find unique ways to get the ball into the end zone. Whether it’s a shovel pass, option, run or sneak, he makes the most of those opportunities.</p>
+<p>I created a difference column to show how much a team has improved or regressed from weeks 3 to 8 of the season and arranged at first by differential. The Jets being as high as they are surprised me when I arranged by differential. It showed they improved a lot in the red zone even though they weren’t a good team overall.</p>
+<p>When I order by w8_epa, Kansas City being No.&nbsp;1 makes sense. Mahomes is always finding ways to improve and find new ways to maneuver his offense through the red zone and find unique ways to get the ball into the end zone. Whether it’s a shovel pass, option, run or sneak, he makes the most of those opportunities.</p>
+<p>Minnesota is a team that made a massive improvement over the course of the season.</p>
 <p>Denver regressing doesn’t surprise me because last season, Russell Wilson faced a plethora of issues and was an eyesore of the Broncos offense.</p>
 <div class="cell">
 <details>
@@ -275,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dumbbell</span>(</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>joined_plays, </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">reorder</span>(posteam, diff), <span class="at">x=</span>w3_epa, <span class="at">xend=</span>w8_epa),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">reorder</span>(posteam, w8_epa), <span class="at">x=</span>w3_epa, <span class="at">xend=</span>w8_epa),</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">1</span>,</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"grey"</span>,</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour_x =</span> <span class="st">"green"</span>,</span>
